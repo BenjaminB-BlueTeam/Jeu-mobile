@@ -20,18 +20,12 @@ Deno.serve(async (req) => {
 
   const serviceClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-  const { data: base, error: baseError } = await serviceClient
-    .from("bases")
-    .select("id")
-    .eq("player_id", user.id)
-    .single();
-  if (baseError || !base) {
-    return new Response(JSON.stringify({ error: "base_not_found" }), { status: 404 });
-  }
-
-  const { data, error } = await serviceClient.rpc("fn_get_base_state", { p_base_id: base.id });
+  // p_player_id comes from the verified JWT (user.id), never from client input:
+  // the RPC resolves the caller's own base internally (see migration comments).
+  const { data, error } = await serviceClient.rpc("fn_get_base_state", { p_player_id: user.id });
   if (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    const status = error.message === "base_not_found" ? 404 : 500;
+    return new Response(JSON.stringify({ error: error.message }), { status });
   }
 
   return new Response(JSON.stringify(data), {

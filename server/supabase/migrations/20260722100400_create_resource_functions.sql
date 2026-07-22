@@ -173,28 +173,31 @@ begin
 end;
 $$;
 
--- Full read model consumed by the client. Resolves any due queues first so
--- the returned state always reflects reality as of "now".
-create or replace function fn_get_base_state(p_base_id uuid)
+-- Full read model consumed by the client. Takes ONLY p_player_id (derived by
+-- the Edge Function from the verified JWT, never from client-supplied input)
+-- and resolves the caller's base internally -- a base_id parameter here would
+-- let a caller reference another player's base (IDOR/confused deputy), since
+-- these SECURITY DEFINER functions run with elevated privileges and bypass RLS.
+create or replace function fn_get_base_state(p_player_id uuid)
 returns jsonb
 language plpgsql
 security definer
 set search_path = public
 as $$
 declare
-  v_player_id uuid;
+  v_base_id uuid;
   v_proj record;
   v_result jsonb;
 begin
-  select player_id into v_player_id from bases where id = p_base_id;
+  select id into v_base_id from bases where player_id = p_player_id;
   if not found then
     raise exception 'base_not_found';
   end if;
 
-  perform fn_resolve_building_queue(p_base_id);
-  perform fn_resolve_research_queue(v_player_id);
+  perform fn_resolve_building_queue(v_base_id);
+  perform fn_resolve_research_queue(p_player_id);
 
-  select * into v_proj from fn_project_resources(p_base_id, now());
+  select * into v_proj from fn_project_resources(v_base_id, now());
 
   select jsonb_build_object(
     'resources', jsonb_build_object(
@@ -209,21 +212,21 @@ begin
     ),
     'buildings', coalesce((
       select jsonb_agg(jsonb_build_object('building_type', building_type, 'level', level))
-      from buildings where base_id = p_base_id
+      from buildings where base_id = v_base_id
     ), '[]'::jsonb),
     'building_queue', (
       select jsonb_build_object('building_type', building_type, 'target_level', target_level,
         'started_at', started_at, 'completed_at', completed_at)
-      from building_queue where base_id = p_base_id
+      from building_queue where base_id = v_base_id
     ),
     'research', coalesce((
       select jsonb_agg(jsonb_build_object('research_code', research_code, 'level', level))
-      from research where player_id = v_player_id
+      from research where player_id = p_player_id
     ), '[]'::jsonb),
     'research_queue', (
       select jsonb_build_object('research_code', research_code, 'target_level', target_level,
         'started_at', started_at, 'completed_at', completed_at)
-      from research_queue where player_id = v_player_id
+      from research_queue where player_id = p_player_id
     )
   ) into v_result;
 

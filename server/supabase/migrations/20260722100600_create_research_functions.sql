@@ -1,16 +1,25 @@
-create or replace function fn_start_research(p_player_id uuid, p_base_id uuid, p_research_code text)
+-- Takes ONLY p_player_id (derived by the Edge Function from the verified JWT).
+-- No base_id parameter -- the base is resolved internally, same rationale as
+-- fn_get_base_state / fn_start_building (IDOR/confused deputy prevention).
+create or replace function fn_start_research(p_player_id uuid, p_research_code text)
 returns jsonb
 language plpgsql
 security definer
 set search_path = public
 as $$
 declare
+  v_base_id uuid;
   v_cfg jsonb;
   v_research_cfg jsonb;
   v_current_level int;
   v_cost_steel numeric; v_cost_components numeric; v_cost_fuel numeric;
   v_proj record;
 begin
+  select id into v_base_id from bases where player_id = p_player_id;
+  if not found then
+    raise exception 'base_not_found';
+  end if;
+
   perform fn_resolve_research_queue(p_player_id);
 
   if exists (select 1 from research_queue where player_id = p_player_id) then
@@ -23,7 +32,7 @@ begin
     raise exception 'unknown_research_code';
   end if;
 
-  if not fn_check_requirements(p_base_id, 'headquarters') then
+  if not fn_check_requirements(v_base_id, 'headquarters') then
     raise exception 'requirements_not_met';
   end if;
 
@@ -35,7 +44,7 @@ begin
   v_cost_components := (v_cfg->'base_cost'->>'components')::numeric * power((v_cfg->>'cost_factor')::numeric, v_current_level);
   v_cost_fuel := (v_cfg->'base_cost'->>'fuel')::numeric * power((v_cfg->>'cost_factor')::numeric, v_current_level);
 
-  select * into v_proj from fn_project_resources(p_base_id, now());
+  select * into v_proj from fn_project_resources(v_base_id, now());
   if v_proj.steel < v_cost_steel or v_proj.components < v_cost_components or v_proj.fuel < v_cost_fuel then
     raise exception 'insufficient_resources';
   end if;
@@ -45,13 +54,13 @@ begin
         resources_components = v_proj.components - v_cost_components,
         resources_fuel = v_proj.fuel - v_cost_fuel,
         last_collected_at = now()
-    where id = p_base_id;
+    where id = v_base_id;
 
   -- Research build time reuses the same time formula as buildings (steel+components
   -- cost / divisor), consistent with fn_start_building.
   insert into research_queue (player_id, base_id, research_code, target_level, started_at, completed_at)
   values (
-    p_player_id, p_base_id, p_research_code, v_current_level + 1, now(),
+    p_player_id, v_base_id, p_research_code, v_current_level + 1, now(),
     now() + (
       (v_cost_steel + v_cost_components)
       / ((select (data->'global'->>'build_time_divisor')::numeric from game_config where category = 'buildings' and key = 'all')
@@ -59,6 +68,6 @@ begin
     ) * interval '1 hour'
   );
 
-  return fn_get_base_state(p_base_id);
+  return fn_get_base_state(p_player_id);
 end;
 $$;
