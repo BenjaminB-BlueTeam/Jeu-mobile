@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "research": {
+    "extraction_efficiency": {
+      "name_key": "research_extraction_efficiency",
+      "requires": { "headquarters": 1 },
+      "base_cost": { "steel": 0, "components": 100, "fuel": 50 },
+      "cost_factor": 1.7,
+      "effect": {
+        "type": "production_multiplier",
+        "target_building": "steel_mine",
+        "bonus_per_level": 0.05
+      }
+    }
+  }
+}
