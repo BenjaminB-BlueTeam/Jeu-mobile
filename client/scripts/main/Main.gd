@@ -12,12 +12,12 @@ func _ready() -> void:
 	get_tree().root.close_requested.connect(_on_close_requested)
 
 func _show_base() -> void:
-	_base.visible = true
-	_map.visible = false
+	_base.set_active(true)
+	_map.set_active(false)
 
 func _show_map() -> void:
-	_base.visible = false
-	_map.visible = true
+	_base.set_active(false)
+	_map.set_active(true)
 
 func _on_close_requested() -> void:
 	GameState.save_now()

@@ -9,6 +9,8 @@
   "building_fuel_refinery": "Fuel Refinery",
   "building_power_plant": "Power Plant",
   "building_vehicle_factory": "Vehicle Factory",
+  "building_headquarters": "Headquarters",
+  "ui_rate_per_hour": "(+{rate}/h)",
   "unit_light_unit": "Recon Buggy",
   "ui_upgrade": "Upgrade",
   "ui_close": "Close",

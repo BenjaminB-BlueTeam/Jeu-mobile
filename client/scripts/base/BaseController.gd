@@ -8,6 +8,7 @@ signal map_requested
 
 const RESOURCE_PRODUCING_BUILDINGS := ["steel_mine", "component_workshop", "fuel_refinery", "power_plant"]
 
+@onready var _canvas_layer: CanvasLayer = $CanvasLayer
 @onready var _building_detail_panel = $CanvasLayer/BuildingDetailPanel
 @onready var _unit_production_panel = $CanvasLayer/UnitProductionPanel
 @onready var _commander: ColorRect = $BuildingsLayer/CommanderSprite
@@ -23,6 +24,12 @@ func _ready() -> void:
 
 	_map_button.text = I18n.t("ui_world_map")
 	_map_button.pressed.connect(func() -> void: map_requested.emit())
+
+## CanvasLayer ignores its Node2D parent's `visible` -- must be toggled
+## explicitly or it stays drawn on top of whichever scene is active.
+func set_active(active: bool) -> void:
+	visible = active
+	_canvas_layer.visible = active
 
 func _on_building_tapped(building_id: String) -> void:
 	if building_id in RESOURCE_PRODUCING_BUILDINGS:

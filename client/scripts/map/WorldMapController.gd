@@ -6,6 +6,7 @@ signal base_requested
 
 const SECTOR_SCENE := preload("res://scenes/map/SectorNode.tscn")
 
+@onready var _canvas_layer: CanvasLayer = $CanvasLayer
 @onready var _grid: GridContainer = $CanvasLayer/UI/SectorGrid
 @onready var _raid_panel = $CanvasLayer/RaidPanel
 @onready var _back_button: Button = $CanvasLayer/UI/BackButton
@@ -14,6 +15,12 @@ func _ready() -> void:
 	_back_button.text = I18n.t("ui_back_to_base")
 	_back_button.pressed.connect(func() -> void: base_requested.emit())
 	_build_grid()
+
+## CanvasLayer ignores its Node2D parent's `visible` -- must be toggled
+## explicitly or it stays drawn on top of whichever scene is active.
+func set_active(active: bool) -> void:
+	visible = active
+	_canvas_layer.visible = active
 
 func _build_grid() -> void:
 	var grid_size: int = GameData.sectors_cfg["grid_size"]

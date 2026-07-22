@@ -1,27 +1,37 @@
 {
+  "headquarters": {
+    "name_key": "building_headquarters",
+    "base_cost": { "steel": 500, "components": 250 },
+    "cost_factor": 2.0,
+    "_note": "Commander hub. Decorative in this prototype: not tappable, no mechanical effect yet."
+  },
   "steel_mine": {
     "name_key": "building_steel_mine",
     "base_cost": { "steel": 60, "components": 15 },
     "cost_factor": 1.5,
-    "produces": { "resource": "steel", "coef": 30 }
+    "produces": { "resource": "steel", "coef": 30 },
+    "energy_consumption": { "base": 6 }
   },
   "component_workshop": {
     "name_key": "building_component_workshop",
     "base_cost": { "steel": 48, "components": 24 },
     "cost_factor": 1.6,
-    "produces": { "resource": "components", "coef": 20 }
+    "produces": { "resource": "components", "coef": 20 },
+    "energy_consumption": { "base": 6 }
   },
   "fuel_refinery": {
     "name_key": "building_fuel_refinery",
     "base_cost": { "steel": 225, "components": 75 },
     "cost_factor": 1.5,
-    "produces": { "resource": "fuel", "coef": 10 }
+    "produces": { "resource": "fuel", "coef": 10 },
+    "energy_consumption": { "base": 8 }
   },
   "power_plant": {
     "name_key": "building_power_plant",
     "base_cost": { "steel": 75, "components": 30 },
     "cost_factor": 1.5,
-    "produces": { "resource": "power", "coef": 20 }
+    "energy_production": { "coef": 30 },
+    "_note": "Energy is a FLUX, not a stored resource: balance = production - consumption, deficit scales down all resource production (see GameState.get_energy_report)."
   },
   "vehicle_factory": {
     "name_key": "building_vehicle_factory",

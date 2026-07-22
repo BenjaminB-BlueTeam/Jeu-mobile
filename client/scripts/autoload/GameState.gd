@@ -19,15 +19,14 @@ signal state_changed
 signal commander_move_requested(building_id: String)
 signal raid_returned(sector_name: String, resource: String, amount: float)
 
-const RESOURCE_KEYS := ["steel", "components", "fuel", "power"]
+const RESOURCE_KEYS := ["steel", "components", "fuel"]
 const BUILDING_TO_RESOURCE := {
 	"steel_mine": "steel",
 	"component_workshop": "components",
 	"fuel_refinery": "fuel",
-	"power_plant": "power",
 }
 
-var resources: Dictionary = {"steel": 500.0, "components": 0.0, "fuel": 0.0, "power": 0.0}
+var resources: Dictionary = {"steel": 500.0, "components": 0.0, "fuel": 0.0}
 var resources_last_collected_at: int = 0
 
 var buildings: Dictionary = {
@@ -77,6 +76,31 @@ func _on_poll_tick() -> void:
 	if had_active:
 		state_changed.emit()
 
+## ---- Energy (a FLUX, not a stored resource) ----
+## balance = Σ production - Σ consumption. A deficit scales down ALL resource
+## production proportionally (factor = production / consumption, clamped 0..1),
+## mirroring OGame's energy rule. Recomputed from current building levels on
+## every read, so it integrates cleanly with lazy-eval (levels are constant
+## between flushes -> factor is constant over each projected interval).
+
+func get_energy_report() -> Dictionary:
+	var production := 0.0
+	var consumption := 0.0
+	var growth: float = GameData.global_cfg["production_growth"]
+	for building_id in buildings:
+		var cfg: Dictionary = GameData.buildings_cfg.get(building_id, {})
+		var level: int = buildings[building_id]["level"]
+		if level <= 0:
+			continue
+		if cfg.has("energy_production"):
+			production += cfg["energy_production"]["coef"] * level * pow(growth, level)
+		if cfg.has("energy_consumption"):
+			consumption += cfg["energy_consumption"]["base"] * level * pow(growth, level)
+	var factor := 1.0
+	if consumption > production and consumption > 0.0:
+		factor = clamp(production / consumption, 0.0, 1.0)
+	return {"production": production, "consumption": consumption, "balance": production - consumption, "factor": factor}
+
 ## ---- Lazy-eval resource projection ----
 
 func _production_rate_per_hour(building_id: String) -> float:
@@ -89,7 +113,15 @@ func _production_rate_per_hour(building_id: String) -> float:
 	var cfg: Dictionary = GameData.buildings_cfg[building_id]
 	var coef: float = cfg["produces"]["coef"]
 	var growth: float = GameData.global_cfg["production_growth"]
-	return coef * level * pow(growth, level)
+	return coef * level * pow(growth, level) * get_energy_report()["factor"]
+
+## Public production rate for a resource (per hour, energy factor applied).
+## UI reads this; it never recomputes the formula itself.
+func get_production_rate(resource: String) -> float:
+	for building_id in BUILDING_TO_RESOURCE:
+		if BUILDING_TO_RESOURCE[building_id] == resource:
+			return _production_rate_per_hour(building_id)
+	return 0.0
 
 ## Pure read: projects resources up to `as_of` (defaults to now) WITHOUT
 ## mutating state.
