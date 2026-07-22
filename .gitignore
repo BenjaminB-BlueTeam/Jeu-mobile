@@ -1,0 +1,17 @@
+# Godot
+.godot/
+*.translation
+export_presets.cfg
+
+# Supabase
+**/supabase/.temp/
+**/supabase/.branches/
+.env
+.env.*
+
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
