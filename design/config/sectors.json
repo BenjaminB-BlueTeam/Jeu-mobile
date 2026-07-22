@@ -1,0 +1,11 @@
+{
+  "grid_size": 5,
+  "player_sector": { "x": 2, "y": 2 },
+  "sectors": [
+    { "id": "sector_1_1", "x": 1, "y": 1, "type": "npc_inactive", "name": "Abandoned Outpost", "loot": { "steel": 300, "components": 100, "fuel": 50 } },
+    { "id": "sector_3_1", "x": 3, "y": 1, "type": "npc_active", "name": "Ashen Garrison" },
+    { "id": "sector_1_3", "x": 1, "y": 3, "type": "npc_inactive", "name": "Derelict Refinery", "loot": { "steel": 150, "components": 250, "fuel": 80 } },
+    { "id": "sector_3_3", "x": 3, "y": 3, "type": "npc_inactive", "name": "Silent Depot", "loot": { "steel": 400, "components": 50, "fuel": 20 } },
+    { "id": "sector_2_0", "x": 2, "y": 0, "type": "npc_active", "name": "Azure Watch" }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "light_unit": {
+    "name_key": "unit_light_unit",
+    "base_cost": { "steel": 50, "components": 20, "fuel": 10 },
+    "cargo_capacity": 200,
+    "travel_time_seconds_per_distance": 15
+  }
+}
