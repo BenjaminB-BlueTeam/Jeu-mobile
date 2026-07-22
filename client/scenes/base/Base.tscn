@@ -1,0 +1,104 @@
+[gd_scene load_steps=8 format=3 uid="uid://base001"]
+
+[ext_resource type="Script" path="res://scripts/base/BaseController.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/ui/ResourceBar.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/ui/QueuePanel.gd" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/ui/BuildingDetailPanel.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/ui/UnitProductionPanel.tscn" id="5"]
+[ext_resource type="Script" path="res://scripts/base/BuildingNode.gd" id="6"]
+[ext_resource type="Script" path="res://scripts/base/CommanderSprite.gd" id="7"]
+
+[node name="Base" type="Node2D"]
+script = ExtResource("1")
+
+[node name="BuildingsLayer" type="Node2D" parent="."]
+
+[node name="SteelMine" type="Button" parent="BuildingsLayer"]
+position = Vector2(40, 220)
+custom_minimum_size = Vector2(200, 100)
+script = ExtResource("6")
+building_id = "steel_mine"
+
+[node name="ComponentWorkshop" type="Button" parent="BuildingsLayer"]
+position = Vector2(260, 220)
+custom_minimum_size = Vector2(200, 100)
+script = ExtResource("6")
+building_id = "component_workshop"
+
+[node name="FuelRefinery" type="Button" parent="BuildingsLayer"]
+position = Vector2(480, 220)
+custom_minimum_size = Vector2(200, 100)
+script = ExtResource("6")
+building_id = "fuel_refinery"
+
+[node name="PowerPlant" type="Button" parent="BuildingsLayer"]
+position = Vector2(40, 340)
+custom_minimum_size = Vector2(200, 100)
+script = ExtResource("6")
+building_id = "power_plant"
+
+[node name="VehicleFactory" type="Button" parent="BuildingsLayer"]
+position = Vector2(260, 340)
+custom_minimum_size = Vector2(200, 100)
+script = ExtResource("6")
+building_id = "vehicle_factory"
+
+[node name="CommanderSprite" type="ColorRect" parent="BuildingsLayer"]
+position = Vector2(500, 340)
+size = Vector2(60, 60)
+color = Color(0.9, 0.7, 0.2, 1)
+script = ExtResource("7")
+
+[node name="CommanderLabel" type="Label" parent="BuildingsLayer/CommanderSprite"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "CMD"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI" type="Control" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ResourceBar" type="HBoxContainer" parent="CanvasLayer/UI"]
+script = ExtResource("2")
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 704.0
+offset_bottom = 40.0
+theme_override_constants/separation = 20
+
+[node name="SteelLabel" type="Label" parent="CanvasLayer/UI/ResourceBar"]
+text = "Steel: 0"
+
+[node name="ComponentsLabel" type="Label" parent="CanvasLayer/UI/ResourceBar"]
+text = "Components: 0"
+
+[node name="FuelLabel" type="Label" parent="CanvasLayer/UI/ResourceBar"]
+text = "Fuel: 0"
+
+[node name="PowerLabel" type="Label" parent="CanvasLayer/UI/ResourceBar"]
+text = "Power: 0"
+
+[node name="QueuePanel" type="Label" parent="CanvasLayer/UI"]
+script = ExtResource("3")
+offset_left = 16.0
+offset_top = 48.0
+offset_right = 704.0
+offset_bottom = 120.0
+autowrap_mode = 2
+
+[node name="MapButton" type="Button" parent="CanvasLayer/UI"]
+offset_left = 16.0
+offset_top = 1180.0
+offset_right = 216.0
+offset_bottom = 1230.0
+text = "World Map"
+
+[node name="BuildingDetailPanel" parent="CanvasLayer" instance=ExtResource("4")]
+
+[node name="UnitProductionPanel" parent="CanvasLayer" instance=ExtResource("5")]
