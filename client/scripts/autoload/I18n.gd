@@ -3,7 +3,7 @@ extends Node
 ## strings anywhere else in the client (CLAUDE.md i18n rule applies even to
 ## this throwaway prototype).
 
-var locale: String = "en"
+var locale: String = "fr"
 var _translations: Dictionary = {}
 
 func _ready() -> void:

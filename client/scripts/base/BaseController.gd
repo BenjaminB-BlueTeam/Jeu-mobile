@@ -6,7 +6,9 @@ extends Node2D
 
 signal map_requested
 
-const RESOURCE_PRODUCING_BUILDINGS := ["steel_mine", "component_workshop", "fuel_refinery", "power_plant"]
+## Buildings whose tap opens the unit-production panel instead of the upgrade
+## panel. Everything else upgrades (mines, power, storage, ...).
+const UNIT_BUILDINGS := ["vehicle_factory"]
 
 @onready var _canvas_layer: CanvasLayer = $CanvasLayer
 @onready var _building_detail_panel = $CanvasLayer/BuildingDetailPanel
@@ -32,7 +34,7 @@ func set_active(active: bool) -> void:
 	_canvas_layer.visible = active
 
 func _on_building_tapped(building_id: String) -> void:
-	if building_id in RESOURCE_PRODUCING_BUILDINGS:
-		_building_detail_panel.open_for(building_id)
-	else:
+	if building_id in UNIT_BUILDINGS:
 		_unit_production_panel.open_for("light_unit")
+	else:
+		_building_detail_panel.open_for(building_id)

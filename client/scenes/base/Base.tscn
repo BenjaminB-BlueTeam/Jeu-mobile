@@ -106,13 +106,21 @@ script = ExtResource("6")
 building_id = "vehicle_factory"
 accent = Color(0.5, 0.55, 0.32, 1)
 
+[node name="StorageDepot" type="Button" parent="BuildingsLayer"]
+position = Vector2(380, 590)
+custom_minimum_size = Vector2(300, 110)
+size = Vector2(300, 110)
+script = ExtResource("6")
+building_id = "storage_depot"
+accent = Color(0.55, 0.5, 0.68, 1)
+
 [node name="CommanderShadow" type="ColorRect" parent="BuildingsLayer"]
-position = Vector2(408, 622)
+position = Vector2(338, 778)
 size = Vector2(64, 64)
 color = Color(0, 0, 0, 0.35)
 
 [node name="CommanderSprite" type="ColorRect" parent="BuildingsLayer"]
-position = Vector2(400, 614)
+position = Vector2(330, 770)
 size = Vector2(64, 64)
 color = Color(0.9, 0.7, 0.2, 1)
 script = ExtResource("7")

@@ -35,6 +35,7 @@ var buildings: Dictionary = {
 	"fuel_refinery": {"level": 1},
 	"power_plant": {"level": 1},
 	"vehicle_factory": {"level": 1},
+	"storage_depot": {"level": 1},
 }
 
 var build_queue: Dictionary = {"active": false, "building_id": "", "target_level": 0, "started_at": 0, "completed_at": 0}
@@ -62,7 +63,12 @@ func _ready() -> void:
 func _apply_save(data: Dictionary) -> void:
 	resources = data.get("resources", resources)
 	resources_last_collected_at = data.get("resources_last_collected_at", Time.get_unix_time_from_system())
-	buildings = data.get("buildings", buildings)
+	# Merge saved levels onto the default building set so buildings added in a
+	# newer prototype version still exist (with default level 1) for old saves.
+	var saved_buildings: Dictionary = data.get("buildings", {})
+	for bid in saved_buildings:
+		if buildings.has(bid):
+			buildings[bid] = saved_buildings[bid]
 	build_queue = data.get("build_queue", build_queue)
 	unit_queue = data.get("unit_queue", unit_queue)
 	units_available = data.get("units_available", units_available)
@@ -113,7 +119,19 @@ func _production_rate_per_hour(building_id: String) -> float:
 	var cfg: Dictionary = GameData.buildings_cfg[building_id]
 	var coef: float = cfg["produces"]["coef"]
 	var growth: float = GameData.global_cfg["production_growth"]
-	return coef * level * pow(growth, level) * get_energy_report()["factor"]
+	var speed: float = GameData.global_cfg["speed_factor"]
+	return coef * level * pow(growth, level) * get_energy_report()["factor"] * speed
+
+## ---- Storage capacity ----
+## One shared cap for the 3 stored resources (v1 simplification). A full store
+## stops that resource's production -- enforced by clamping the projection.
+
+func get_storage_capacity() -> float:
+	var cfg: Dictionary = GameData.buildings_cfg.get("storage_depot", {})
+	var level: int = buildings.get("storage_depot", {}).get("level", 0)
+	if cfg.is_empty() or level <= 0:
+		return INF
+	return cfg["capacity"]["base"] * pow(cfg["capacity"]["growth"], level)
 
 ## Public production rate for a resource (per hour, energy factor applied).
 ## UI reads this; it never recomputes the formula itself.
@@ -128,6 +146,7 @@ func get_production_rate(resource: String) -> float:
 func get_current_resources(as_of: int = -1) -> Dictionary:
 	var now: int = as_of if as_of >= 0 else Time.get_unix_time_from_system()
 	var elapsed_hours: float = max(0.0, (now - resources_last_collected_at) / 3600.0)
+	var cap: float = get_storage_capacity()
 	var projected := {}
 	for key in RESOURCE_KEYS:
 		var building_id := ""
@@ -135,7 +154,7 @@ func get_current_resources(as_of: int = -1) -> Dictionary:
 			if BUILDING_TO_RESOURCE[b] == key:
 				building_id = b
 		var rate: float = _production_rate_per_hour(building_id) if building_id != "" else 0.0
-		projected[key] = resources[key] + rate * elapsed_hours
+		projected[key] = min(resources[key] + rate * elapsed_hours, cap)
 	return projected
 
 ## Freezes the projection into `resources` as of `as_of` (defaults to now).

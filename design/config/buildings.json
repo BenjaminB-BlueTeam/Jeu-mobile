@@ -33,6 +33,13 @@
     "energy_production": { "coef": 30 },
     "_note": "Energy is a FLUX, not a stored resource: balance = production - consumption, deficit scales down all resource production (see GameState.get_energy_report)."
   },
+  "storage_depot": {
+    "name_key": "building_storage_depot",
+    "base_cost": { "steel": 100, "components": 40 },
+    "cost_factor": 1.7,
+    "capacity": { "base": 1250, "growth": 1.6 },
+    "_note": "Shared cap for steel/components/fuel (v1 simplification; OGame has one hangar per resource). Full storage stops production for that resource."
+  },
   "vehicle_factory": {
     "name_key": "building_vehicle_factory",
     "base_cost": { "steel": 160, "components": 90 },
