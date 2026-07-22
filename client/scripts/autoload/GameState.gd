@@ -226,7 +226,7 @@ func _resolve_unit_queue() -> void:
 
 ## ---- Raid (single global travel timer, one convoy at a time) ----
 
-func _find_sector(sector_id: String) -> Dictionary:
+func find_sector(sector_id: String) -> Dictionary:
 	for sector in GameData.sectors_cfg["sectors"]:
 		if sector["id"] == sector_id:
 			return sector
@@ -246,7 +246,7 @@ func start_raid(sector_id: String, quantity: int) -> bool:
 		return false
 	if quantity <= 0 or units_available.get("light_unit", 0) < quantity:
 		return false
-	var sector := _find_sector(sector_id)
+	var sector := find_sector(sector_id)
 	if sector.is_empty() or sector["type"] != "npc_inactive":
 		return false
 
@@ -268,7 +268,7 @@ func _resolve_raid() -> void:
 	if Time.get_unix_time_from_system() < raid["return_at"]:
 		return
 
-	var sector := _find_sector(raid["target_sector_id"])
+	var sector := find_sector(raid["target_sector_id"])
 	units_available["light_unit"] = units_available.get("light_unit", 0) + int(raid["sent_units"].get("light_unit", 0))
 
 	var looted_resource := ""
