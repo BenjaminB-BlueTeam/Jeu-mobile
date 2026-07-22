@@ -1,0 +1,108 @@
+-- Seed game_config from design/config/buildings.json and design/config/research.json (version 1).
+-- Keep this file's jsonb literals in sync with the JSON files by hand; a new
+-- migration + version bump is required whenever the balance changes.
+
+insert into game_config (category, key, data, version) values
+('buildings', 'all', $$
+{
+  "version": 1,
+  "global": {
+    "speed_factor": 1.0,
+    "build_time_divisor": 2500,
+    "production_growth": 1.1,
+    "energy_growth": 1.1
+  },
+  "buildings": {
+    "headquarters": {
+      "name_key": "building_headquarters",
+      "requires": {},
+      "base_cost": { "steel": 90, "components": 0, "fuel": 0 },
+      "cost_factor": 1.6,
+      "produces": null,
+      "energy_consumption": null,
+      "storage_capacity": null
+    },
+    "steel_mine": {
+      "name_key": "building_steel_mine",
+      "requires": { "headquarters": 1 },
+      "base_cost": { "steel": 60, "components": 15, "fuel": 0 },
+      "cost_factor": 1.5,
+      "produces": { "resource": "steel", "coef": 30 },
+      "energy_consumption": { "coef": 10 },
+      "storage_capacity": null
+    },
+    "component_workshop": {
+      "name_key": "building_component_workshop",
+      "requires": { "headquarters": 1 },
+      "base_cost": { "steel": 48, "components": 24, "fuel": 0 },
+      "cost_factor": 1.6,
+      "produces": { "resource": "components", "coef": 20 },
+      "energy_consumption": { "coef": 12 },
+      "storage_capacity": null
+    },
+    "fuel_refinery": {
+      "name_key": "building_fuel_refinery",
+      "requires": { "headquarters": 1 },
+      "base_cost": { "steel": 225, "components": 75, "fuel": 0 },
+      "cost_factor": 1.5,
+      "produces": { "resource": "fuel", "coef": 10, "terrain_factor": 1.0 },
+      "energy_consumption": { "coef": 15 },
+      "storage_capacity": null
+    },
+    "power_plant": {
+      "name_key": "building_power_plant",
+      "requires": { "headquarters": 1 },
+      "base_cost": { "steel": 75, "components": 30, "fuel": 0 },
+      "cost_factor": 1.5,
+      "produces": { "resource": "power", "coef": 20 },
+      "energy_consumption": null,
+      "storage_capacity": null
+    },
+    "storage_depot_steel": {
+      "name_key": "building_storage_depot_steel",
+      "requires": { "headquarters": 1 },
+      "base_cost": { "steel": 1000, "components": 0, "fuel": 0 },
+      "cost_factor": 2.0,
+      "produces": null,
+      "energy_consumption": null,
+      "storage_capacity": { "resource": "steel", "base_capacity": 10000, "growth": 1.5 }
+    },
+    "storage_depot_components": {
+      "name_key": "building_storage_depot_components",
+      "requires": { "headquarters": 1 },
+      "base_cost": { "steel": 0, "components": 1000, "fuel": 0 },
+      "cost_factor": 2.0,
+      "produces": null,
+      "energy_consumption": null,
+      "storage_capacity": { "resource": "components", "base_capacity": 10000, "growth": 1.5 }
+    },
+    "storage_depot_fuel": {
+      "name_key": "building_storage_depot_fuel",
+      "requires": { "headquarters": 1 },
+      "base_cost": { "steel": 500, "components": 500, "fuel": 0 },
+      "cost_factor": 2.0,
+      "produces": null,
+      "energy_consumption": null,
+      "storage_capacity": { "resource": "fuel", "base_capacity": 10000, "growth": 1.5 }
+    }
+  }
+}
+$$::jsonb, 1),
+('research', 'all', $$
+{
+  "version": 1,
+  "research": {
+    "extraction_efficiency": {
+      "name_key": "research_extraction_efficiency",
+      "requires": { "headquarters": 1 },
+      "base_cost": { "steel": 0, "components": 100, "fuel": 50 },
+      "cost_factor": 1.7,
+      "effect": {
+        "type": "production_multiplier",
+        "target_building": "steel_mine",
+        "bonus_per_level": 0.05
+      }
+    }
+  }
+}
+$$::jsonb, 1);
