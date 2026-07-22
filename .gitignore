@@ -15,6 +15,3 @@ Thumbs.db
 *.swp
 .idea/
 .vscode/
-
-# Godot editor MCP dev addon (local tooling, not game content)
-client/addons/godot_mcp/
