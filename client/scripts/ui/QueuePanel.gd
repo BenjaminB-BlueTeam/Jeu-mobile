@@ -14,7 +14,7 @@ func _process(_delta: float) -> void:
 
 	if GameState.unit_queue["active"]:
 		var remaining_units: int = max(0, GameState.unit_queue["completed_at"] - now)
-		parts.append("%s x%d: %ds" % [I18n.t("unit_" + GameState.unit_queue["unit_id"]), GameState.unit_queue["quantity"], remaining_units])
+		parts.append("%s x%d: %ds" % [I18n.t("unit_" + GameState.unit_queue["unit_id"]), int(GameState.unit_queue["quantity"]), remaining_units])
 
 	if GameState.raid["active"] and not GameState.raid["resolved"]:
 		var remaining_raid: int = max(0, GameState.raid["return_at"] - now)
