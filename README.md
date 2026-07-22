@@ -8,8 +8,21 @@ Jeu mobile de stratégie persistante : mécaniques OGame transposées dans un un
 - `design/i18n/` — fichiers de traduction (EN canonique, FR au lancement)
 - `design/config/` — formules d'équilibrage en JSON (partagées client/serveur)
 - `design/equilibrage-iron-front.xlsx` — tableur d'équilibrage (à déposer ici)
-- `server/` — (à venir) projet Supabase : migrations SQL + edge functions TypeScript
-- `client/` — (à venir) projet Godot 4 (GDScript)
+- `server/` — projet Supabase : migrations SQL + edge functions TypeScript (voir `server/README.md`)
+- `client/` — projet Godot 4 (GDScript) : scène `Base`, autoloads `SupabaseClient`/`GameState`/`I18n`
+
+## État — Phase 1 (prototype économie)
+
+Branche `phase-1-economy` : boucle économique de base (Steel/Components/Fuel/Power, lazy
+evaluation, file de construction 1 slot/base, recherche minimale 1 slot/joueur). Détail dans
+`server/README.md`. Reste à faire avant la Phase 2 (carte-monde, missions, combat) :
+
+- Auth réelle (email/OAuth) en remplacement de l'anonyme.
+- Automatisation de la synchro `design/config/*.json` → `game_config` si la balance devient volatile.
+- Décision sur `design/equilibrage-iron-front.xlsx` (créer le tableur ou acter le JSON comme
+  unique source de vérité et corriger `CLAUDE.md` en conséquence).
+- Levée de la contrainte `unique(bases.player_id)` pour la colonisation multi-base.
+- Tests automatisés des fonctions SQL (pgTAP ou équivalent).
 
 ## Stack (validée par recherche approfondie, juillet 2026)
 
