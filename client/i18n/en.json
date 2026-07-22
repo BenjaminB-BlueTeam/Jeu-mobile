@@ -1,0 +1,18 @@
+{
+  "app_title": "Iron Front",
+  "res_steel": "Steel",
+  "res_components": "Components",
+  "res_fuel": "Fuel",
+  "res_power": "Power",
+  "slot_empty": "Empty slot",
+  "level_abbr": "Lv",
+  "building_headquarters": "Headquarters",
+  "building_steel_mine": "Steel Mine",
+  "building_component_workshop": "Component Workshop",
+  "building_fuel_refinery": "Fuel Refinery",
+  "building_power_plant": "Power Plant",
+  "building_storage_depot_steel": "Steel Depot",
+  "building_storage_depot_components": "Component Depot",
+  "building_storage_depot_fuel": "Fuel Depot",
+  "research_extraction_efficiency": "Extraction Efficiency"
+}

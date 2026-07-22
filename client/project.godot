@@ -1,0 +1,25 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are meant to be edited.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Iron Front"
+run/main_scene="res://scenes/base/Base.tscn"
+config/features=PackedStringArray("4.3", "GL Compatibility")
+
+[autoload]
+
+I18n="*res://scripts/autoload/I18n.gd"
+SupabaseClient="*res://scripts/autoload/SupabaseClient.gd"
+GameState="*res://scripts/autoload/GameState.gd"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
