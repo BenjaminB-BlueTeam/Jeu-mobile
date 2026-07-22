@@ -13,7 +13,7 @@ const UNIT_BUILDINGS := ["vehicle_factory"]
 @onready var _canvas_layer: CanvasLayer = $CanvasLayer
 @onready var _building_detail_panel = $CanvasLayer/BuildingDetailPanel
 @onready var _unit_production_panel = $CanvasLayer/UnitProductionPanel
-@onready var _commander: ColorRect = $BuildingsLayer/CommanderSprite
+@onready var _commander: Sprite2D = $BuildingsLayer/CommanderSprite
 @onready var _map_button: Button = $CanvasLayer/UI/MapButton
 
 func _ready() -> void:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://base001"]
+[gd_scene load_steps=19 format=3 uid="uid://base001"]
 
 [ext_resource type="Script" path="res://scripts/base/BaseController.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/ui/ResourceBar.gd" id="2"]
@@ -7,21 +7,30 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/UnitProductionPanel.tscn" id="5"]
 [ext_resource type="Script" path="res://scripts/base/BuildingNode.gd" id="6"]
 [ext_resource type="Script" path="res://scripts/base/CommanderSprite.gd" id="7"]
+[ext_resource type="Texture2D" path="res://assets/tiles/grass.png" id="8"]
+[ext_resource type="Texture2D" path="res://assets/tiles/bld_headquarters.png" id="9"]
+[ext_resource type="Texture2D" path="res://assets/tiles/bld_steel_mine.png" id="10"]
+[ext_resource type="Texture2D" path="res://assets/tiles/bld_component_workshop.png" id="11"]
+[ext_resource type="Texture2D" path="res://assets/tiles/bld_fuel_refinery.png" id="12"]
+[ext_resource type="Texture2D" path="res://assets/tiles/bld_power_plant.png" id="13"]
+[ext_resource type="Texture2D" path="res://assets/tiles/bld_vehicle_factory.png" id="14"]
+[ext_resource type="Texture2D" path="res://assets/tiles/bld_storage_depot.png" id="15"]
+[ext_resource type="Texture2D" path="res://assets/tiles/commander_tank.png" id="16"]
 
 [sub_resource type="StyleBoxFlat" id="compound_box"]
-bg_color = Color(0.11, 0.13, 0.1, 1)
+bg_color = Color(0.1, 0.14, 0.09, 0.55)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.2, 0.24, 0.16, 1)
+border_color = Color(0.22, 0.28, 0.16, 1)
 corner_radius_top_left = 12
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 
 [sub_resource type="StyleBoxFlat" id="hq_box"]
-bg_color = Color(0.28, 0.22, 0.06, 1)
+bg_color = Color(0.28, 0.22, 0.06, 0.85)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
@@ -35,10 +44,12 @@ corner_radius_bottom_left = 8
 [node name="Base" type="Node2D"]
 script = ExtResource("1")
 
-[node name="Ground" type="ColorRect" parent="."]
+[node name="Ground" type="TextureRect" parent="."]
+texture_filter = 1
 offset_right = 720.0
 offset_bottom = 1280.0
-color = Color(0.145, 0.165, 0.115, 1)
+texture = ExtResource("8")
+stretch_mode = 1
 
 [node name="Compound" type="Panel" parent="."]
 offset_left = 24.0
@@ -53,6 +64,16 @@ offset_top = 180.0
 offset_right = 680.0
 offset_bottom = 285.0
 theme_override_styles/panel = SubResource("hq_box")
+
+[node name="HQIcon" type="TextureRect" parent="HQ"]
+texture_filter = 1
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 100.0
+offset_bottom = 96.0
+texture = ExtResource("9")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="HQLabel" type="Label" parent="HQ"]
 anchors_preset = 15
@@ -73,6 +94,7 @@ size = Vector2(300, 110)
 script = ExtResource("6")
 building_id = "steel_mine"
 accent = Color(0.62, 0.66, 0.72, 1)
+sprite = ExtResource("10")
 
 [node name="ComponentWorkshop" type="Button" parent="BuildingsLayer"]
 position = Vector2(380, 330)
@@ -81,6 +103,7 @@ size = Vector2(300, 110)
 script = ExtResource("6")
 building_id = "component_workshop"
 accent = Color(0.35, 0.62, 0.78, 1)
+sprite = ExtResource("11")
 
 [node name="FuelRefinery" type="Button" parent="BuildingsLayer"]
 position = Vector2(40, 460)
@@ -89,6 +112,7 @@ size = Vector2(300, 110)
 script = ExtResource("6")
 building_id = "fuel_refinery"
 accent = Color(0.82, 0.5, 0.24, 1)
+sprite = ExtResource("12")
 
 [node name="PowerPlant" type="Button" parent="BuildingsLayer"]
 position = Vector2(380, 460)
@@ -97,6 +121,7 @@ size = Vector2(300, 110)
 script = ExtResource("6")
 building_id = "power_plant"
 accent = Color(0.85, 0.78, 0.3, 1)
+sprite = ExtResource("13")
 
 [node name="VehicleFactory" type="Button" parent="BuildingsLayer"]
 position = Vector2(40, 590)
@@ -105,6 +130,7 @@ size = Vector2(300, 110)
 script = ExtResource("6")
 building_id = "vehicle_factory"
 accent = Color(0.5, 0.55, 0.32, 1)
+sprite = ExtResource("14")
 
 [node name="StorageDepot" type="Button" parent="BuildingsLayer"]
 position = Vector2(380, 590)
@@ -113,26 +139,13 @@ size = Vector2(300, 110)
 script = ExtResource("6")
 building_id = "storage_depot"
 accent = Color(0.55, 0.5, 0.68, 1)
+sprite = ExtResource("15")
 
-[node name="CommanderShadow" type="ColorRect" parent="BuildingsLayer"]
-position = Vector2(338, 778)
-size = Vector2(64, 64)
-color = Color(0, 0, 0, 0.35)
-
-[node name="CommanderSprite" type="ColorRect" parent="BuildingsLayer"]
-position = Vector2(330, 770)
-size = Vector2(64, 64)
-color = Color(0.9, 0.7, 0.2, 1)
+[node name="CommanderSprite" type="Sprite2D" parent="BuildingsLayer"]
+position = Vector2(360, 800)
+scale = Vector2(4, 4)
+texture = ExtResource("16")
 script = ExtResource("7")
-
-[node name="CommanderLabel" type="Label" parent="BuildingsLayer/CommanderSprite"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-theme_override_colors/font_color = Color(0.15, 0.12, 0.02, 1)
-text = "CMD"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
