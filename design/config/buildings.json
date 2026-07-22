@@ -1,0 +1,33 @@
+{
+  "steel_mine": {
+    "name_key": "building_steel_mine",
+    "base_cost": { "steel": 60, "components": 15 },
+    "cost_factor": 1.5,
+    "produces": { "resource": "steel", "coef": 30 }
+  },
+  "component_workshop": {
+    "name_key": "building_component_workshop",
+    "base_cost": { "steel": 48, "components": 24 },
+    "cost_factor": 1.6,
+    "produces": { "resource": "components", "coef": 20 }
+  },
+  "fuel_refinery": {
+    "name_key": "building_fuel_refinery",
+    "base_cost": { "steel": 225, "components": 75 },
+    "cost_factor": 1.5,
+    "produces": { "resource": "fuel", "coef": 10 }
+  },
+  "power_plant": {
+    "name_key": "building_power_plant",
+    "base_cost": { "steel": 75, "components": 30 },
+    "cost_factor": 1.5,
+    "produces": { "resource": "power", "coef": 20 }
+  },
+  "vehicle_factory": {
+    "name_key": "building_vehicle_factory",
+    "base_cost": { "steel": 160, "components": 90 },
+    "cost_factor": 1.55,
+    "produces": null,
+    "_note": "Level is purely cosmetic in this prototype: no mechanical effect (no build time reduction). Scope cut, assumed."
+  }
+}
