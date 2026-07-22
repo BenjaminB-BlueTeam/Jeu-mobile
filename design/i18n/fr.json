@@ -1,1 +1,18 @@
-{ "app_title": "Iron Front", "res_steel": "Acier", "res_components": "Composants", "res_fuel": "Carburant", "res_power": "Énergie" }
+{
+  "app_title": "Iron Front",
+  "res_steel": "Acier",
+  "res_components": "Composants",
+  "res_fuel": "Carburant",
+  "res_power": "Énergie",
+  "slot_empty": "Emplacement vide",
+  "level_abbr": "Niv",
+  "building_headquarters": "Quartier général",
+  "building_steel_mine": "Mine d'acier",
+  "building_component_workshop": "Atelier de composants",
+  "building_fuel_refinery": "Raffinerie de carburant",
+  "building_power_plant": "Centrale électrique",
+  "building_storage_depot_steel": "Dépôt d'acier",
+  "building_storage_depot_components": "Dépôt de composants",
+  "building_storage_depot_fuel": "Dépôt de carburant",
+  "research_extraction_efficiency": "Efficacité d'extraction"
+}
