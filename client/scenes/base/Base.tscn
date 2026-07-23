@@ -55,7 +55,7 @@ stretch_mode = 1
 offset_left = 24.0
 offset_top = 300.0
 offset_right = 696.0
-offset_bottom = 900.0
+offset_bottom = 980.0
 theme_override_styles/panel = SubResource("compound_box")
 
 [node name="HQ" type="Panel" parent="."]
@@ -140,6 +140,38 @@ script = ExtResource("6")
 building_id = "storage_depot"
 accent = Color(0.55, 0.5, 0.68, 1)
 sprite = ExtResource("15")
+
+[node name="AdvancedReactor" type="Button" parent="BuildingsLayer"]
+position = Vector2(40, 720)
+custom_minimum_size = Vector2(300, 110)
+size = Vector2(300, 110)
+script = ExtResource("6")
+building_id = "advanced_reactor"
+accent = Color(0.8, 0.35, 0.2, 1)
+
+[node name="AuxiliaryGenerator" type="Button" parent="BuildingsLayer"]
+position = Vector2(380, 720)
+custom_minimum_size = Vector2(300, 110)
+size = Vector2(300, 110)
+script = ExtResource("6")
+building_id = "auxiliary_generator"
+accent = Color(0.7, 0.75, 0.45, 1)
+
+[node name="EngineeringCorps" type="Button" parent="BuildingsLayer"]
+position = Vector2(40, 850)
+custom_minimum_size = Vector2(300, 110)
+size = Vector2(300, 110)
+script = ExtResource("6")
+building_id = "engineering_corps"
+accent = Color(0.3, 0.6, 0.6, 1)
+
+[node name="LandClearing" type="Button" parent="BuildingsLayer"]
+position = Vector2(380, 850)
+custom_minimum_size = Vector2(300, 110)
+size = Vector2(300, 110)
+script = ExtResource("6")
+building_id = "land_clearing"
+accent = Color(0.55, 0.42, 0.28, 1)
 
 [node name="CommanderSprite" type="Sprite2D" parent="BuildingsLayer"]
 position = Vector2(360, 800)
