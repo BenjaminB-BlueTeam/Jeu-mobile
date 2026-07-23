@@ -46,5 +46,35 @@
     "cost_factor": 1.55,
     "produces": null,
     "_note": "Level is purely cosmetic in this prototype: no mechanical effect (no build time reduction). Scope cut, assumed."
+  },
+  "advanced_reactor": {
+    "name_key": "building_advanced_reactor",
+    "base_cost": { "steel": 380, "components": 420 },
+    "cost_factor": 1.68,
+    "energy_production": { "coef": 45 },
+    "fuel_consumption": { "coef": 4 },
+    "_note": "T3 energy source. Consumes fuel as a flux (see plan-dev-base-perso-v1.md §3): fuel_consumption modeled as a negative rate on fuel, floored at 0, does not cascade back into the energy balance (v1 simplification, noted limitation)."
+  },
+  "auxiliary_generator": {
+    "name_key": "building_auxiliary_generator",
+    "base_cost": { "steel": 50, "components": 20 },
+    "cost_factor": 1.4,
+    "energy_production": { "coef": 12 },
+    "_note": "Cheap early energy top-up, lower yield than Power Plant/Advanced Reactor."
+  },
+  "engineering_corps": {
+    "name_key": "building_engineering_corps",
+    "base_cost": { "steel": 300, "components": 150 },
+    "cost_factor": 1.6,
+    "produces": null,
+    "_note": "No resource production. Reduces build-queue time only (see GameState.get_build_time_seconds): divisor (1 + level). Does not affect unit production time (v1 scope)."
+  },
+  "land_clearing": {
+    "name_key": "building_land_clearing",
+    "base_cost": { "steel": 500, "components": 300 },
+    "cost_factor": 1.9,
+    "fields_per_clearing": 2,
+    "produces": null,
+    "_note": "Unlocks additional base fields (see GameState.get_max_fields). Renamed Terraformer, cf. univers-du-jeu.md."
   }
 }

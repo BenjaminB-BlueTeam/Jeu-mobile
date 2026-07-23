@@ -3,5 +3,6 @@
   "speed_factor": 20.0,
   "build_time_divisor": 2500,
   "production_growth": 1.1,
-  "loot_rate_inactive": 0.75
+  "loot_rate_inactive": 0.75,
+  "base_fields": 8
 }
