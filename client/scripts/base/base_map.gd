@@ -44,11 +44,29 @@ func configure(base_id: String, biome: String) -> void:
 	_base_id = base_id
 	_biome = biome
 	_configured = true
+	_clear_dynamic_layers()
 	_build_ground()
 	_build_slots()
 	_build_paths()
 	_build_decor()
 	_setup_camera()
+
+## Removes all previously-built ground cells / slots / paths / decor so
+## configure() is idempotent -- it can safely run more than once (it does on
+## every real run: BaseMap's own _ready() self-configures with defaults before
+## Main._ready() gets a chance to call configure() explicitly with the real
+## base, since child _ready() runs before parent _ready() in Godot). Uses
+## .free() (immediate) rather than .queue_free() (deferred) because the
+## rebuild functions below run later in this same call and need the layers to
+## already be genuinely empty, not just scheduled for removal.
+func _clear_dynamic_layers() -> void:
+	_ground_layer.clear()
+	for child in _buildings_layer.get_children():
+		child.free()
+	for child in _paths_layer.get_children():
+		child.free()
+	for child in _decor_layer.get_children():
+		child.free()
 
 func _build_ground() -> void:
 	var grid: Dictionary = GameData.base_layout_cfg["grid_size"]
