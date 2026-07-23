@@ -134,8 +134,8 @@ pour toute résolution de sprite, même principe de fallback en cascade partout 
 
 **Couches (`Node2D` enfants, dans l'ordre de dessin)** :
 1. `GroundLayer` (`TileMapLayer`) — un `TileSet` minimal créé pour ce projet, une seule tuile
-   source (`grass.png`) au démarrage ; case par case, texture + teinte résolues via
-   `AssetResolver.get_ground_texture(biome, variant_seed)`.
+   source (`grass.png`), 4 alternatives à teinte baked (cf. §2, déviation Task 3) ; case par case,
+   `BaseMap` choisit juste un index d'alternative seedé par tuile, sans passer par `AssetResolver`.
 2. `PathsLayer` (`Line2D` ou `TileMapLayer` selon ce qui rend le mieux à l'implémentation) — chemins
    organiques reliant HQ ↔ quartiers ↔ slots, tracés à partir des coordonnées du layout (pas de
    config séparée : dérivés géométriquement des positions de slots).
