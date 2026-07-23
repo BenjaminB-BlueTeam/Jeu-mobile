@@ -70,3 +70,25 @@ fin du timer, puis relancer (F5). Vérifier qu'à la réouverture, l'état refl�
 - 1 seul convoi de raid actif à la fois, un seul timer aller-retour global (pas de distinction
   aller/retour séparée).
 - Commandant = rectangle coloré + label "CMD" (aucun asset fourni/généré pour cette tâche).
+
+### 6. Construction de nouveaux bâtiments (T3)
+
+Au lancement, 4 nouvelles tuiles apparaissent en bas de la Compound, grisées avec le texte
+"Construire" : Advanced Reactor, Auxiliary Generator, Engineering Corps, Land Clearing.
+
+- Taper une tuile grisée → panneau de détail avec bouton "Construire" (pas "Améliorer") et un coût
+  de niveau 0→1. Confirmer débite les ressources, lance le timer (même file que les améliorations
+  — un seul slot de construction). À la fin, la tuile passe en état "construit" (niveau 1, sprite
+  plein/couleur pleine).
+- Construire 3 bâtiments jamais posés (en plus des 6 déjà là) → un 4e échoue avec le toast/message
+  "Cases insuffisantes" tant que Land Clearing n'a pas été construit et monté (8 champs de base,
+  6 déjà pris par les bâtiments existants → seulement 2 places libres avant Land Clearing).
+- Construire puis monter Land Clearing d'un niveau → le plafond de champs augmente (+2 par
+  niveau), un bâtiment auparavant bloqué par "Cases insuffisantes" devient constructible.
+- Construire Engineering Corps → le temps affiché pour une amélioration suivante (ex. Steel Mine)
+  diminue visiblement par rapport à avant sa construction.
+- Construire Advanced Reactor puis observer la barre de Carburant (haut d'écran) : son taux de
+  montée doit baisser (le réacteur consomme du carburant en flux), sans jamais passer sous 0.
+- Faire monter un bâtiment existant (ex. Steel Mine) au niveau 6 en accéléré (`speed_factor`) :
+  la tuile doit changer d'aspect (bordure plus épaisse/claire, un chevron ▲ apparaît à côté du
+  niveau) par rapport à son apparence aux niveaux 1-5.
