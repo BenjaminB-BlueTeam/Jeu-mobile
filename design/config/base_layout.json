@@ -1,0 +1,50 @@
+{
+  "grid_size": { "w": 12, "h": 16 },
+  "tile_size_px": 128,
+  "hq_slot": { "x": 4, "y": 1, "size": 3 },
+  "slots": [
+    { "id": 1,  "x": 1,  "y": 5,  "size": 2 },
+    { "id": 2,  "x": 3,  "y": 5,  "size": 2 },
+    { "id": 3,  "x": 1,  "y": 7,  "size": 2 },
+    { "id": 4,  "x": 3,  "y": 8,  "size": 2 },
+    { "id": 5,  "x": 8,  "y": 5,  "size": 2 },
+    { "id": 6,  "x": 8,  "y": 7,  "size": 2 },
+    { "id": 7,  "x": 6,  "y": 6,  "size": 2 },
+    { "id": 8,  "x": 6,  "y": 8,  "size": 2 },
+    { "id": 9,  "x": 1,  "y": 10, "size": 2 },
+    { "id": 10, "x": 3,  "y": 11, "size": 2 },
+    { "id": 11, "x": 1,  "y": 12, "size": 2 },
+    { "id": 12, "x": 3,  "y": 13, "size": 2 },
+    { "id": 13, "x": 10, "y": 3,  "size": 2 },
+    { "id": 14, "x": 8,  "y": 10, "size": 2 },
+    { "id": 15, "x": 8,  "y": 12, "size": 2 },
+    { "id": 16, "x": 6,  "y": 11, "size": 2 },
+    { "id": 17, "x": 6,  "y": 13, "size": 2 },
+    { "id": 18, "x": 1,  "y": 2,  "size": 2 },
+    { "id": 19, "x": 8,  "y": 2,  "size": 2 },
+    { "id": 20, "x": 9,  "y": 14, "size": 2 }
+  ],
+  "defense_slots": [
+    { "id": "d1", "x": 0,  "y": 0,  "size": 1 },
+    { "id": "d2", "x": 11, "y": 0,  "size": 1 },
+    { "id": "d3", "x": 0,  "y": 7,  "size": 1 },
+    { "id": "d4", "x": 11, "y": 7,  "size": 1 },
+    { "id": "d5", "x": 0,  "y": 15, "size": 1 },
+    { "id": "d6", "x": 11, "y": 15, "size": 1 },
+    { "id": "d7", "x": 5,  "y": 0,  "size": 1 },
+    { "id": "d8", "x": 5,  "y": 15, "size": 1 }
+  ],
+  "assignments": {
+    "headquarters": "hq",
+    "steel_mine": 1,
+    "component_workshop": 2,
+    "fuel_refinery": 3,
+    "power_plant": 4,
+    "storage_depot": 5,
+    "vehicle_factory": 6,
+    "advanced_reactor": 7,
+    "auxiliary_generator": 8,
+    "engineering_corps": 9,
+    "land_clearing": 10
+  }
+}
