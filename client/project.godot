@@ -22,6 +22,7 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 
 I18n="*res://scripts/autoload/I18n.gd"
 GameData="*res://scripts/autoload/GameData.gd"
+AssetResolver="*res://scripts/autoload/AssetResolver.gd"
 SaveManager="*res://scripts/autoload/SaveManager.gd"
 GameState="*res://scripts/autoload/GameState.gd"
 ToastManager="*res://scripts/ui/ToastManager.gd"
