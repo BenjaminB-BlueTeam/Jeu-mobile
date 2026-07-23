@@ -106,7 +106,9 @@ existants répartis en plusieurs zones reliées par des chemins, quelques cases 
   vue ne doit jamais sortir des bords de la carte.
 - Taper un bâtiment posé ouvre le même panneau de détail qu'avant (coût/durée/bouton
   Construire-ou-Améliorer). Taper l'Usine de véhicules ouvre le panneau de production d'unités.
-  Taper une case vide (périphérie, ou l'un des emplacements non assignés) ne fait rien.
+  Taper une case vide (périphérie, ou l'un des emplacements non assignés) ne fait rien. Le QG
+  (QG/HQ) est décoratif : il ne réagit pas au tap, c'est normal (pas d'entrée mécanique dans
+  `GameState`).
 - Lancer une amélioration : le Commandant (sprite tank) doit visiblement se déplacer vers le
   bâtiment concerné, comme avant.
 - Le sol a un aspect légèrement varié case par case (teintes subtiles), mais reste visuellement

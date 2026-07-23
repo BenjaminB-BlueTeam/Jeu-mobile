@@ -114,6 +114,12 @@ pour toute résolution de sprite, même principe de fallback en cascade partout 
 # Fallback : ground_<biome>_<1 + variant_seed % 3>.png -> grass.png (Kenney placeholder)
 ```
 
+> **Déviation à l'implémentation (Task 3)** : `get_ground_texture()` a finalement été abandonné,
+> le sol n'a jamais eu besoin de résolution de texture à l'exécution. La variation visuelle du sol
+> est entièrement bakée dans les 4 tuiles alternatives du `TileSet` construit à la préparation des
+> assets ; `BaseMap._build_ground()` choisit juste un index d'alternative (seedé par tuile) parmi
+> ces 4, sans passer par `AssetResolver` ni appliquer de `modulate` à l'exécution.
+
 - `variant_seed` est dérivé du `base_id` + de la position de la tuile (ex.
   `hash(str(base_id) + "_" + str(tile_x) + "_" + str(tile_y)) % 3`), pour que chaque base ait un sol
   légèrement différent mais **stable** (même sol à chaque rechargement de la même base).

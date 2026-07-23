@@ -73,7 +73,7 @@ func _build_ground() -> void:
 	for y in range(grid["h"]):
 		for x in range(grid["w"]):
 			var seed_val: int = hash("%s_%d_%d" % [_base_id, x, y])
-			var alt: int = seed_val % GROUND_ALTERNATIVES
+			var alt: int = posmod(seed_val, GROUND_ALTERNATIVES)
 			_ground_layer.set_cell(Vector2i(x, y), 0, Vector2i(0, 0), alt)
 
 func _slot_center(rect: Dictionary, tile_size: int) -> Vector2:
@@ -97,9 +97,15 @@ func _build_slots() -> void:
 		slot.tile_size_px = tile_size
 		slot.building_id = by_slot_id.get(rect["id"], "")
 		slot.position = _slot_center(rect, tile_size)
+		if slot.building_id != "":
+			# Set before add_child(): add_child() triggers the child's
+			# _ready() synchronously, which calls refresh() reading accent
+			# immediately -- setting it after add_child() would leave the
+			# slot rendering the default gray background until something
+			# later calls refresh() again.
+			slot.accent = _accent_for(slot.building_id)
 		_buildings_layer.add_child(slot)
 		if slot.building_id != "":
-			slot.accent = _accent_for(slot.building_id)
 			# HQ is decorative only (see design/config/buildings.json):
 			# not tappable, no mechanical effect. Override SlotArea's generic
 			# default (input_pickable = building_id != "") which would
