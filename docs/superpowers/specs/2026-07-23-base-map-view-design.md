@@ -51,12 +51,12 @@ par des chemins, avec des vides pour la lisibilité.
     { "id": 10, "x": 3,  "y": 11, "size": 2 },
     { "id": 11, "x": 1,  "y": 12, "size": 2 },
     { "id": 12, "x": 3,  "y": 13, "size": 2 },
-    { "id": 13, "x": 5,  "y": 11, "size": 2 },
+    { "id": 13, "x": 10, "y": 3,  "size": 2 },
     { "id": 14, "x": 8,  "y": 10, "size": 2 },
     { "id": 15, "x": 8,  "y": 12, "size": 2 },
     { "id": 16, "x": 6,  "y": 11, "size": 2 },
     { "id": 17, "x": 6,  "y": 13, "size": 2 },
-    { "id": 18, "x": 3,  "y": 3,  "size": 2 },
+    { "id": 18, "x": 1,  "y": 2,  "size": 2 },
     { "id": 19, "x": 8,  "y": 2,  "size": 2 },
     { "id": 20, "x": 9,  "y": 14, "size": 2 }
   ],
@@ -89,11 +89,11 @@ par des chemins, avec des vides pour la lisibilité.
 - Slots `11-20` : réservés, sans assignation (futurs bâtiments T4+, ex. `research_center`).
 - `defense_slots` : réservés, sans assignation (aucune unité de défense n'existe encore dans
   `units.json`/`buildings.json`) — rendus comme terrain vide, non-interactifs, pour cette tranche.
-- **À l'implémentation** : un script de validation (Python ou script GDScript ad-hoc) vérifie
-  qu'aucun rectangle (HQ + slots + defense_slots, chacun `size × size` tiles à partir de `x,y`) ne
-  chevauche un autre, et que tout tient dans `grid_size`. Les coordonnées ci-dessus sont un premier
-  jet cohérent visuellement (quartiers séparés par des vides de 1-2 tiles) mais seront ajustées si
-  le script détecte un chevauchement.
+- **Déjà validé** : les coordonnées ci-dessus ont été passées dans un script anti-chevauchement
+  pendant le brainstorm (2 conflits trouvés — slot 18 chevauchait le HQ, slot 13 chevauchait le
+  slot 16 — corrigés ; 29 rectangles au total, tous distincts et dans les bornes 12x16). Le même
+  script (Python, cf. plan d'implémentation) est livré dans le repo pour valider tout futur ajustement
+  du layout sans avoir à relancer Godot.
 - Le mapping `assignments` est **cosmétique uniquement** : changer quel bâtiment occupe quel slot
   ne change rien au gameplay (mêmes formules, même `GameState.buildings`). Il est identique pour
   toutes les bases (pas de personnalisation par base dans cette tranche).
