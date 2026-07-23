@@ -1,16 +1,25 @@
 extends Button
-## One tappable building tile on the Base grid. Shows the building sprite
-## (Kenney Tiny Battle, CC0) in a colored panel with a name/level label below.
-## Pure display -- costs and timers live in GameState, never computed here.
+## One tappable building tile on the Base grid. Shows the building sprite in a
+## colored panel with a name/level label below. Pure display -- costs and
+## timers live in GameState, never computed here.
 ##
-## Two extra display states on top of the base T1/T2 look:
+## Two independent, coexisting cosmetic layers on top of the base look:
 ## - level == 0 ("unbuilt"): dimmed placeholder tile, "Construire" label, no
-##   sprite tint, no rank badge. Tapping it still opens BuildingDetailPanel,
-##   which offers the "Build" (level 0 -> 1) flow.
-## - level >= 1: a visual "tier" (1 + floor((level-1)/5), i.e. one step every
-##   5 levels) brightens the border and icon and adds a chevron rank badge,
-##   purely cosmetic, no new PNG assets (see docs/superpowers/specs/
-##   2026-07-23-t3-construction-champs-design.md §4).
+##   rank badge. Tapping it still opens BuildingDetailPanel, which offers the
+##   "Build" (level 0 -> 1) flow.
+## - level >= 1:
+##   - Border/badge "micro" tier (1 + floor((level-1)/5), one step every 5
+##     levels, unbounded): brightens the border/icon and adds a chevron rank
+##     badge, purely cosmetic, no PNG assets involved (see docs/superpowers/
+##     specs/2026-07-23-t3-construction-champs-design.md §4).
+##   - Sprite "asset" tier (see design/docs/direction-artistique.md §12):
+##     clamp(floor(level / levels_per_tier) + 1, 1, max_tier), levels_per_tier/
+##     max_tier_level read from GameData.buildings_cfg[building_id].visual_tier
+##     (default 10/40). Resolves res://assets/tiles/bld_<building_id>_t<N>.png,
+##     falling back to the next lower tier, then to the no-suffix file, then to
+##     the @export sprite override, then to no icon at all (matches every
+##     building's current single-sprite/no-sprite behavior until tiered PNGs
+##     actually exist).
 
 @export var building_id: String = ""
 @export var accent: Color = Color(0.5, 0.5, 0.5)
@@ -30,17 +39,15 @@ func _ready() -> void:
 	_refresh()
 
 func _build_children() -> void:
-	if sprite:
-		_icon = TextureRect.new()
-		_icon.texture = sprite
-		_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		_icon.set_anchors_preset(Control.PRESET_FULL_RECT)
-		_icon.offset_top = 6
-		_icon.offset_bottom = -32
-		add_child(_icon)
+	_icon = TextureRect.new()
+	_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_icon.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_icon.offset_top = 6
+	_icon.offset_bottom = -32
+	add_child(_icon)
 
 	_label = Label.new()
 	_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -96,10 +103,35 @@ func _apply_unbuilt_style() -> void:
 	if _icon:
 		_icon.modulate = Color(1, 1, 1, 0.25)
 
+## design/docs/direction-artistique.md §12: clamp(floor(level/levels_per_tier)
+## + 1, 1, max_tier). Unbuilt tiles preview at level 1 (tier 1).
+func _visual_asset_tier(level: int) -> int:
+	var cfg: Dictionary = GameData.buildings_cfg.get(building_id, {}).get("visual_tier", {})
+	var levels_per_tier: int = cfg.get("levels_per_tier", 10)
+	var max_tier_level: int = cfg.get("max_tier_level", 40)
+	var max_tier: int = int(max_tier_level / levels_per_tier)
+	return clamp(int(floor(float(max(level, 1)) / levels_per_tier)) + 1, 1, max_tier)
+
+## Cascading fallback: bld_<id>_t<N>.png down to _t1, then the no-suffix file,
+## then the @export sprite override, then null (no icon shown) -- lets tiered
+## art be generated progressively without any code/scene change.
+func _resolve_sprite_texture(asset_tier: int) -> Texture2D:
+	for t in range(asset_tier, 0, -1):
+		var tiered_path := "res://assets/tiles/bld_%s_t%d.png" % [building_id, t]
+		if ResourceLoader.exists(tiered_path):
+			return load(tiered_path)
+	var base_path := "res://assets/tiles/bld_%s.png" % building_id
+	if ResourceLoader.exists(base_path):
+		return load(base_path)
+	return sprite
+
 func _refresh() -> void:
 	if building_id == "" or not GameState.buildings.has(building_id) or _label == null:
 		return
 	var level: int = GameState.buildings[building_id]["level"]
+	var resolved_sprite := _resolve_sprite_texture(_visual_asset_tier(level))
+	if resolved_sprite:
+		_icon.texture = resolved_sprite
 	if level <= 0:
 		_apply_unbuilt_style()
 		_label.text = I18n.t("ui_build")

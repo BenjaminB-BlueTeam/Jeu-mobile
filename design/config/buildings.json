@@ -3,49 +3,56 @@
     "name_key": "building_headquarters",
     "base_cost": { "steel": 500, "components": 250 },
     "cost_factor": 2.0,
-    "_note": "Commander hub. Decorative in this prototype: not tappable, no mechanical effect yet."
+    "_note": "Commander hub. Decorative in this prototype: not tappable, no mechanical effect yet.",
+    "visual_tier": { "levels_per_tier": 10, "max_tier_level": 40 }
   },
   "steel_mine": {
     "name_key": "building_steel_mine",
     "base_cost": { "steel": 60, "components": 15 },
     "cost_factor": 1.5,
     "produces": { "resource": "steel", "coef": 30 },
-    "energy_consumption": { "base": 6 }
+    "energy_consumption": { "base": 6 },
+    "visual_tier": { "levels_per_tier": 10, "max_tier_level": 40 }
   },
   "component_workshop": {
     "name_key": "building_component_workshop",
     "base_cost": { "steel": 48, "components": 24 },
     "cost_factor": 1.6,
     "produces": { "resource": "components", "coef": 20 },
-    "energy_consumption": { "base": 6 }
+    "energy_consumption": { "base": 6 },
+    "visual_tier": { "levels_per_tier": 10, "max_tier_level": 40 }
   },
   "fuel_refinery": {
     "name_key": "building_fuel_refinery",
     "base_cost": { "steel": 225, "components": 75 },
     "cost_factor": 1.5,
     "produces": { "resource": "fuel", "coef": 10 },
-    "energy_consumption": { "base": 8 }
+    "energy_consumption": { "base": 8 },
+    "visual_tier": { "levels_per_tier": 10, "max_tier_level": 40 }
   },
   "power_plant": {
     "name_key": "building_power_plant",
     "base_cost": { "steel": 75, "components": 30 },
     "cost_factor": 1.5,
     "energy_production": { "coef": 30 },
-    "_note": "Energy is a FLUX, not a stored resource: balance = production - consumption, deficit scales down all resource production (see GameState.get_energy_report)."
+    "_note": "Energy is a FLUX, not a stored resource: balance = production - consumption, deficit scales down all resource production (see GameState.get_energy_report).",
+    "visual_tier": { "levels_per_tier": 10, "max_tier_level": 40 }
   },
   "storage_depot": {
     "name_key": "building_storage_depot",
     "base_cost": { "steel": 100, "components": 40 },
     "cost_factor": 1.7,
     "capacity": { "base": 1250, "growth": 1.6 },
-    "_note": "Shared cap for steel/components/fuel (v1 simplification; OGame has one hangar per resource). Full storage stops production for that resource."
+    "_note": "Shared cap for steel/components/fuel (v1 simplification; OGame has one hangar per resource). Full storage stops production for that resource.",
+    "visual_tier": { "levels_per_tier": 10, "max_tier_level": 40 }
   },
   "vehicle_factory": {
     "name_key": "building_vehicle_factory",
     "base_cost": { "steel": 160, "components": 90 },
     "cost_factor": 1.55,
     "produces": null,
-    "_note": "Level is purely cosmetic in this prototype: no mechanical effect (no build time reduction). Scope cut, assumed."
+    "_note": "Level is purely cosmetic in this prototype: no mechanical effect (no build time reduction). Scope cut, assumed.",
+    "visual_tier": { "levels_per_tier": 10, "max_tier_level": 40 }
   },
   "advanced_reactor": {
     "name_key": "building_advanced_reactor",
@@ -53,21 +60,24 @@
     "cost_factor": 1.68,
     "energy_production": { "coef": 45 },
     "fuel_consumption": { "coef": 4 },
-    "_note": "T3 energy source. Consumes fuel as a flux (see plan-dev-base-perso-v1.md §3): fuel_consumption modeled as a negative rate on fuel, floored at 0, does not cascade back into the energy balance, and is not scaled by the energy deficit factor like production is (v1 simplification, noted limitation)."
+    "_note": "T3 energy source. Consumes fuel as a flux (see plan-dev-base-perso-v1.md §3): fuel_consumption modeled as a negative rate on fuel, floored at 0, does not cascade back into the energy balance, and is not scaled by the energy deficit factor like production is (v1 simplification, noted limitation).",
+    "visual_tier": { "levels_per_tier": 10, "max_tier_level": 40 }
   },
   "auxiliary_generator": {
     "name_key": "building_auxiliary_generator",
     "base_cost": { "steel": 50, "components": 20 },
     "cost_factor": 1.4,
     "energy_production": { "coef": 12 },
-    "_note": "Cheap early energy top-up, lower yield than Power Plant/Advanced Reactor."
+    "_note": "Cheap early energy top-up, lower yield than Power Plant/Advanced Reactor.",
+    "visual_tier": { "levels_per_tier": 10, "max_tier_level": 40 }
   },
   "engineering_corps": {
     "name_key": "building_engineering_corps",
     "base_cost": { "steel": 300, "components": 150 },
     "cost_factor": 1.6,
     "produces": null,
-    "_note": "No resource production. Reduces build-queue time only (see GameState.get_build_time_seconds): divisor (1 + level). Does not affect unit production time (v1 scope)."
+    "_note": "No resource production. Reduces build-queue time only (see GameState.get_build_time_seconds): divisor (1 + level). Does not affect unit production time (v1 scope).",
+    "visual_tier": { "levels_per_tier": 10, "max_tier_level": 40 }
   },
   "land_clearing": {
     "name_key": "building_land_clearing",
@@ -75,6 +85,7 @@
     "cost_factor": 1.9,
     "fields_per_clearing": 2,
     "produces": null,
-    "_note": "Unlocks additional base fields (see GameState.get_max_fields). Renamed Terraformer, cf. univers-du-jeu.md."
+    "_note": "Unlocks additional base fields (see GameState.get_max_fields). Renamed Terraformer, cf. univers-du-jeu.md.",
+    "visual_tier": { "levels_per_tier": 10, "max_tier_level": 40 }
   }
 }

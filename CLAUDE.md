@@ -29,6 +29,7 @@ Jeu mobile de stratégie persistante type OGame (univers guerre moderne fantasy,
 - Monétisation : confort et cosmétique uniquement, jamais d'achat direct d'unités/ressources massives.
 - Le Héros/Commandant est purement cosmétique côté client (il "joue" la file d'événements serveur).
 - Factions : cosmétiques uniquement (bonus gameplay via les Doctrines).
+- Paliers visuels des bâtiments : 1 tier tous les 10 niveaux, cap niveau 40 (5 tiers T1-T5), formule côté client depuis `visual_tier` dans `buildings.json`, footprint invariant, fallback vers tier inférieur, purement cosmétique.
 
 ## Conventions
 

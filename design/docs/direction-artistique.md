@@ -74,3 +74,48 @@ Toujours générer en batch avec la référence maîtresse en image de référen
 - Isométrique, vectoriel flat, réalisme photo, dark/grimdark.
 - Couleurs saturées pures hors VFX/accents.
 - Gore, références militaires réelles (insignes, drapeaux, modèles de véhicules existants reconnaissables).
+
+## 12. Paliers visuels des bâtiments
+
+Purement cosmétique côté client, aucun impact gameplay/serveur.
+
+- Chaque bâtiment change de skin tous les 10 niveaux, cap au niveau 40.
+- Tier visuel = `clamp(floor(level / 10) + 1, 1, 5)`. Soit : niv 1-9 = T1, 10-19 = T2, 20-29 = T3,
+  30-39 = T4, 40+ = T5 (après 40, skin inchangé).
+
+### Progression visuelle par archétype
+
+- **Production ressources** (Steel Mine, Component Workshop, Fuel Refinery, Power Plant) :
+  T1 installation artisanale (bois, petite machinerie, un silo) → T2 structure métal/béton,
+  convoyeurs → T3 site développé, 2-3 silos, fumée légère → T4 complexe industriel, grues,
+  éclairage → T5 mégacomplexe, stockage massif, fumée continue.
+- **Militaire** (Vehicle Factory, Missile Silo, défenses) : T1 hangar de campagne (bâches, sacs de
+  sable) → T2 hangar en dur → T3 rampes, marquages au sol → T4 complexe blindé, tourelles
+  décoratives → T5 forteresse, véhicules garés, projecteurs.
+- **Civil/support** (HQ, Research Center, Storage Depots, Engineering Corps, etc.) : T1
+  préfabriqué/tente renforcée → T2 bâtiment en dur → T3 antennes, annexes → T4 campus fortifié →
+  T5 complexe emblématique, drapeaux faction, détails animables.
+
+### Contraintes
+
+- Le footprint (2x2, 3x3, 1x1) ne change JAMAIS entre tiers ; seuls la silhouette en hauteur et les
+  détails évoluent. Chaque tier reste identifiable comme le même bâtiment (forme signature +
+  couleur dominante constantes de T1 à T5).
+- **Cohérence DA** : chaque tier respecte strictement les sections 1-11 (rendu peint top-down ¾,
+  palette semi-désaturée militaire chaude, interdits §11). Aucun skin ne doit sembler venir d'un
+  autre style.
+- **Progression perceptible** : chaque tier doit être visiblement plus sophistiqué que le
+  précédent (plus de volume, de détails, de machinerie, d'éclairage) — un joueur doit percevoir
+  l'upgrade au premier coup d'œil, sans lire le niveau.
+
+### Nommage et fallback
+
+- Nommage assets : `bld_<building_key>_t1.png` … `_t5.png`. Les fichiers actuels sans suffixe =
+  placeholders T1.
+- Fallback : si `_tN` absent, utiliser le tier inférieur existant le plus proche (jusqu'à `_t1` ou
+  fichier sans suffixe). Permet de générer les tiers progressivement (ex : T1/T3/T5 d'abord).
+
+### Génération IA
+
+Réutiliser le préfixe de style §10 + description du tier ; générer les 5 tiers d'un même bâtiment
+dans la même session avec la référence maîtresse pour cohérence.
