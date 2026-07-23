@@ -96,6 +96,22 @@ Au lancement, 4 nouvelles tuiles apparaissent en bas de la Compound, grisées av
   la tuile doit changer d'aspect (bordure plus épaisse/claire, un chevron ▲ apparaît à côté du
   niveau) par rapport à son apparence aux niveaux 1-5.
 
+### 7. Carte de base (BaseMap)
+
+Au lancement, la Base s'affiche désormais comme une vraie carte : QG en haut-centre, bâtiments
+existants répartis en plusieurs zones reliées par des chemins, quelques cases vides en périphérie
+(réservées aux futures défenses).
+
+- Glisser (souris ou doigt) déplace la vue (pan), la molette (ou pincement sur mobile) zoome ; la
+  vue ne doit jamais sortir des bords de la carte.
+- Taper un bâtiment posé ouvre le même panneau de détail qu'avant (coût/durée/bouton
+  Construire-ou-Améliorer). Taper l'Usine de véhicules ouvre le panneau de production d'unités.
+  Taper une case vide (périphérie, ou l'un des emplacements non assignés) ne fait rien.
+- Lancer une amélioration : le Commandant (sprite tank) doit visiblement se déplacer vers le
+  bâtiment concerné, comme avant.
+- Le sol a un aspect légèrement varié case par case (teintes subtiles), mais reste visuellement
+  stable si vous rechargez la même partie (pas de sol qui "flickers" à chaque relance).
+
 ## Limites connues (assumées, pas des bugs)
 
 - Pas d'onboarding codé (Commandant par défaut au lancement) — décrit dans
