@@ -59,6 +59,16 @@ func refresh() -> void:
 		_label.text = ""
 		return
 
+	if building_id == "headquarters":
+		# HQ is config-only/decorative (design/config/buildings.json): it has
+		# no entry in GameState.buildings and no level. Render it as a
+		# permanently "built" tile without touching GameState at all.
+		_icon.texture = AssetResolver.get_building_texture("headquarters", 1)
+		_icon.modulate = Color(1, 1, 1, 1)
+		_background.color = accent.darkened(0.45)
+		_label.text = I18n.t("building_headquarters")
+		return
+
 	if not GameState.buildings.has(building_id):
 		return
 	var level: int = GameState.buildings[building_id]["level"]

@@ -82,7 +82,14 @@ func _build_slots() -> void:
 		_buildings_layer.add_child(slot)
 		if slot.building_id != "":
 			slot.accent = _accent_for(slot.building_id)
-			slot.slot_clicked.connect(_on_slot_clicked)
+			# HQ is decorative only (see design/config/buildings.json):
+			# not tappable, no mechanical effect. Override SlotArea's generic
+			# default (input_pickable = building_id != "") which would
+			# otherwise make it clickable, and skip the click wiring entirely.
+			if slot.building_id == "headquarters":
+				slot.input_pickable = false
+			else:
+				slot.slot_clicked.connect(_on_slot_clicked)
 			building_positions[slot.building_id] = slot.get_world_center()
 
 	_commander.set_building_positions(building_positions)
