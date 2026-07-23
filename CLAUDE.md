@@ -6,6 +6,7 @@ Jeu mobile de stratégie persistante type OGame (univers guerre moderne fantasy,
 - `concept-jeu-ogame-like.md` — vision, scope, roadmap
 - `compendium-mecaniques-ogame.md` — LA référence des mécaniques et décisions design actées
 - `univers-du-jeu.md` — nommage EN/FR de toutes les entités
+- `direction-artistique.md` — DA de référence, à respecter pour tout asset généré ou intégré
 
 ## Stack
 
