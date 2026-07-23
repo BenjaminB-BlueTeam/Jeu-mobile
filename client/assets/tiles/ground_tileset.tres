@@ -1,0 +1,18 @@
+[gd_resource type="TileSet" format=3 uid="uid://ckv5dq5x4a6mw"]
+
+[ext_resource type="Texture2D" uid="uid://tnwqm6len57d" path="res://assets/tiles/grass.png" id="1_7t7fh"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_trny7"]
+texture = ExtResource("1_7t7fh")
+0:0/next_alternative_id = 4
+0:0/0 = 0
+0:0/1 = 1
+0:0/1/modulate = Color(0.92, 1, 0.9, 1)
+0:0/2 = 2
+0:0/2/modulate = Color(1, 0.95, 0.85, 1)
+0:0/3 = 3
+0:0/3/modulate = Color(0.88, 0.95, 0.88, 1)
+
+[resource]
+tile_size = Vector2i(128, 128)
+sources/0 = SubResource("TileSetAtlasSource_trny7")
