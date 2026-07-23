@@ -161,7 +161,10 @@ func get_used_fields() -> int:
 func get_production_rate(resource: String) -> float:
 	for building_id in BUILDING_TO_RESOURCE:
 		if BUILDING_TO_RESOURCE[building_id] == resource:
-			return _production_rate_per_hour(building_id)
+			var rate := _production_rate_per_hour(building_id)
+			if resource == "fuel":
+				rate -= _fuel_consumption_rate_per_hour()
+			return rate
 	return 0.0
 
 ## Sums fuel_consumption across all built buildings that declare it (currently

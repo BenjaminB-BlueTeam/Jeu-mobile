@@ -53,7 +53,7 @@
     "cost_factor": 1.68,
     "energy_production": { "coef": 45 },
     "fuel_consumption": { "coef": 4 },
-    "_note": "T3 energy source. Consumes fuel as a flux (see plan-dev-base-perso-v1.md §3): fuel_consumption modeled as a negative rate on fuel, floored at 0, does not cascade back into the energy balance (v1 simplification, noted limitation)."
+    "_note": "T3 energy source. Consumes fuel as a flux (see plan-dev-base-perso-v1.md §3): fuel_consumption modeled as a negative rate on fuel, floored at 0, does not cascade back into the energy balance, and is not scaled by the energy deficit factor like production is (v1 simplification, noted limitation)."
   },
   "auxiliary_generator": {
     "name_key": "building_auxiliary_generator",
