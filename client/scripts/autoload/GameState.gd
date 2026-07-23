@@ -36,6 +36,10 @@ var buildings: Dictionary = {
 	"power_plant": {"level": 1},
 	"vehicle_factory": {"level": 1},
 	"storage_depot": {"level": 1},
+	"advanced_reactor": {"level": 0},
+	"auxiliary_generator": {"level": 0},
+	"engineering_corps": {"level": 0},
+	"land_clearing": {"level": 0},
 }
 
 var build_queue: Dictionary = {"active": false, "building_id": "", "target_level": 0, "started_at": 0, "completed_at": 0}
@@ -133,6 +137,25 @@ func get_storage_capacity() -> float:
 		return INF
 	return cfg["capacity"]["base"] * pow(cfg["capacity"]["growth"], level)
 
+## ---- Fields (OGame-style build cap) ----
+## A pure numeric counter, mirroring the OGame planet field count: it caps
+## how many DISTINCT buildings can exist (level >= 1), not a spatial grid --
+## see docs/superpowers/specs/2026-07-23-t3-construction-champs-design.md §1.
+## Levelling up an already-built building never consumes a new field.
+
+func get_max_fields() -> int:
+	var base: int = GameData.global_cfg["base_fields"]
+	var per_level: float = GameData.buildings_cfg.get("land_clearing", {}).get("fields_per_clearing", 0)
+	var level: int = buildings.get("land_clearing", {}).get("level", 0)
+	return base + int(per_level * level)
+
+func get_used_fields() -> int:
+	var used := 0
+	for building_id in buildings:
+		if buildings[building_id]["level"] >= 1:
+			used += 1
+	return used
+
 ## Public production rate for a resource (per hour, energy factor applied).
 ## UI reads this; it never recomputes the formula itself.
 func get_production_rate(resource: String) -> float:
@@ -140,6 +163,21 @@ func get_production_rate(resource: String) -> float:
 		if BUILDING_TO_RESOURCE[building_id] == resource:
 			return _production_rate_per_hour(building_id)
 	return 0.0
+
+## Sums fuel_consumption across all built buildings that declare it (currently
+## only advanced_reactor). Same exponential shape as production/consumption
+## elsewhere in this file.
+func _fuel_consumption_rate_per_hour() -> float:
+	var consumption := 0.0
+	var growth: float = GameData.global_cfg["production_growth"]
+	var speed: float = GameData.global_cfg["speed_factor"]
+	for building_id in buildings:
+		var cfg: Dictionary = GameData.buildings_cfg.get(building_id, {})
+		var level: int = buildings[building_id]["level"]
+		if level <= 0 or not cfg.has("fuel_consumption"):
+			continue
+		consumption += cfg["fuel_consumption"]["coef"] * level * pow(growth, level) * speed
+	return consumption
 
 ## Pure read: projects resources up to `as_of` (defaults to now) WITHOUT
 ## mutating state.
@@ -154,7 +192,12 @@ func get_current_resources(as_of: int = -1) -> Dictionary:
 			if BUILDING_TO_RESOURCE[b] == key:
 				building_id = b
 		var rate: float = _production_rate_per_hour(building_id) if building_id != "" else 0.0
-		projected[key] = min(resources[key] + rate * elapsed_hours, cap)
+		if key == "fuel":
+			rate -= _fuel_consumption_rate_per_hour()
+		var value: float = resources[key] + rate * elapsed_hours
+		if key == "fuel":
+			value = max(0.0, value)
+		projected[key] = min(value, cap)
 	return projected
 
 ## Freezes the projection into `resources` as of `as_of` (defaults to now).
@@ -191,11 +234,14 @@ func _time_from_cost_seconds(cost: Dictionary) -> float:
 	return ((steel_cost + components_cost) / (divisor * speed)) * 3600.0
 
 func get_build_time_seconds(building_id: String) -> float:
-	return _time_from_cost_seconds(get_building_cost(building_id))
+	var engineering_level: int = buildings.get("engineering_corps", {}).get("level", 0)
+	return _time_from_cost_seconds(get_building_cost(building_id)) / (1 + engineering_level)
 
 func start_building(building_id: String) -> bool:
 	_resolve_build_queue()
 	if build_queue["active"]:
+		return false
+	if buildings[building_id]["level"] == 0 and get_used_fields() >= get_max_fields():
 		return false
 	var cost := get_building_cost(building_id)
 	if not can_afford(cost):
